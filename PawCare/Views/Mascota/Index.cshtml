@@ -1,40 +1,107 @@
 ﻿@model IEnumerable<PawCare.Models.Mascota>
 
-<h1>Lista de Mascotas</h1>
+@{
+    ViewData["Title"] = "Gestión de Mascotas";
+}
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Nueva Mascota</a>
-</p>
+<div class="container mt-4">
+    <h1 class="mb-4">Gestión de Mascotas</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nombre Mascota</th>
-            <th>Dueño</th>
-            <th>Tipo</th>
-            <th>Edad</th>
-            <th>Teléfono</th>
-            <th>Observaciones</th>
-           <!-- <th>Acciones</th>-->
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var mascota in Model)
-        {
-            <tr>
-                <td>@mascota.Id</td>
-                <td>@mascota.NombreMascota</td>
-                <td>@mascota.NombreDueno</td>
-                <td>@mascota.Tipo</td>
-                <td>@mascota.Edad</td>
-                <td>@mascota.Telefono</td>
-                <td>@mascota.Observaciones</td>
-                <!--<td>
-                    <a asp-action="Edit" asp-route-id="@mascota.Id">Editar</a> |
-                    <a asp-action="Delete" asp-route-id="@mascota.Id">Eliminar</a>
-                </td>-->
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="row">
+        <div class="col-md-4 col-12 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Registrar Nueva Mascota</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Cambiado asp-action="Index" por asp-action="Create" -->
+                    <form asp-controller="Mascota" asp-action="Create" method="post">
+                        @Html.AntiForgeryToken()
+
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div class="alert alert-danger mb-3">
+                                <ul class="mb-0">
+                                    @foreach (var modelError in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                    {
+                                        <li>@modelError.ErrorMessage</li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+
+                        <div class="mb-3">
+                            <label for="NombreMascota" class="form-label">Nombre Mascota</label>
+                            <input name="NombreMascota" class="form-control" value="@(Context.Request.HasFormContentType? Context.Request.Form["NombreMascota"].ToString() : "")" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="NombreDueno" class="form-label">Nombre Dueño</label>
+                            <input name="NombreDueno" class="form-control" value="@(Context.Request.HasFormContentType? Context.Request.Form["NombreDueno"].ToString() : "")" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Tipo" class="form-label">Tipo</label>
+                            <input name="Tipo" class="form-control" value="@(Context.Request.HasFormContentType? Context.Request.Form["Tipo"].ToString() : "")" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Edad" class="form-label">Edad</label>
+                            <input name="Edad" type="number" class="form-control" value="@(Context.Request.HasFormContentType? Context.Request.Form["Edad"].ToString() : "")" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Telefono" class="form-label">Teléfono</label>
+                            <input name="Telefono" class="form-control" value="@(Context.Request.HasFormContentType? Context.Request.Form["Telefono"].ToString() : "")" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Observaciones" class="form-label">Observaciones</label>
+                            <input name="Observaciones" class="form-control" value="@(Context.Request.HasFormContentType? Context.Request.Form["Observaciones"].ToString() : "")" />
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna del Listado / Tabla -->
+        <div class="col-md-8 col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Lista de Mascotas</h5>
+                </div>
+                <div class="card-body table-responsive">
+                    <table class="table table-striped table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre Mascota</th>
+                                <th>Dueño</th>
+                                <th>Tipo</th>
+                                <th>Edad</th>
+                                <th>Teléfono</th>
+                                <th>Observaciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var mascota in Model)
+                            {
+                                <tr>
+                                    <td>@mascota.Id</td>
+                                    <td>@mascota.NombreMascota</td>
+                                    <td>@mascota.NombreDueno</td>
+                                    <td>@mascota.Tipo</td>
+                                    <td>@mascota.Edad</td>
+                                    <td>@mascota.Telefono</td>
+                                    <td>@mascota.Observaciones</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
