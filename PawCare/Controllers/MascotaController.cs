@@ -13,9 +13,14 @@ namespace PawCare.Controllers
         {
             _context = context;
         }
+
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Mascotas.ToListAsync());
+            var mascotas = await _context.Mascotas
+                .FromSqlRaw("EXEC spListarMascotas")
+                .ToListAsync();
+
+            return View(mascotas);
         }
 
         // CREATE - formulario
@@ -31,8 +36,16 @@ namespace PawCare.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(mascota);
-                await _context.SaveChangesAsync();
+                await _context.Database.ExecuteSqlRawAsync(
+                    "EXEC spInsertarMascota @NombreMascota = {0}, @NombreDueno = {1}, @Tipo = {2}, @Edad = {3}, @Telefono = {4}, @Observaciones = {5}",
+                    mascota.NombreMascota,
+                    mascota.NombreDueno,
+                    mascota.Tipo,
+                    mascota.Edad,
+                    mascota.Telefono,
+                    (object)mascota.Observaciones ?? DBNull.Value
+                );
+
                 return RedirectToAction(nameof(Index));
             }
 
