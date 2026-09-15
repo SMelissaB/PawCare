@@ -2,6 +2,10 @@
 
 <h1>Lista de Mascotas</h1>
 
+<p>
+    <a asp-action="Create" class="btn btn-primary">Nueva Mascota</a>
+</p>
+
 <table class="table">
     <thead>
         <tr>
@@ -12,6 +16,7 @@
             <th>Edad</th>
             <th>Teléfono</th>
             <th>Observaciones</th>
+           <!-- <th>Acciones</th>-->
         </tr>
     </thead>
     <tbody>
@@ -25,6 +30,10 @@
                 <td>@mascota.Edad</td>
                 <td>@mascota.Telefono</td>
                 <td>@mascota.Observaciones</td>
+                <!--<td>
+                    <a asp-action="Edit" asp-route-id="@mascota.Id">Editar</a> |
+                    <a asp-action="Delete" asp-route-id="@mascota.Id">Eliminar</a>
+                </td>-->
             </tr>
         }
     </tbody>
