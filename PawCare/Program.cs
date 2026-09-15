@@ -1,7 +1,17 @@
+using Microsoft.EntityFrameworkCore;
+using PawCare.Data;
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<MascotaContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("ConexionMascota")
+    )
+);
+
 
 var app = builder.Build();
 
